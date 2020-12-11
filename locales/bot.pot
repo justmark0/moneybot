@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-11 05:42+0300\n"
+"POT-Creation-Date: 2020-12-11 20:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,19 +26,51 @@ msgid ""
 "/help - See list of commands"
 msgstr ""
 
-#: handlers/users/main.py:9 handlers/users/start.py:12
+#: handlers/users/main.py:21
+msgid "Main menu"
+msgstr ""
+
+#: handlers/users/main.py:27
+msgid "Use keyboard to choose options"
+msgstr ""
+
+#: handlers/users/main.py:30
+msgid "Language was updated successfully"
+msgstr ""
+
+#: handlers/users/main.py:37
+msgid "You can put money on your account using FKwalet"
+msgstr ""
+
+#: handlers/users/main.py:41
+msgid "You are not registered use /start"
+msgstr ""
+
+#: handlers/users/main.py:43
+msgid "You have {money} rub on your account"
+msgstr ""
+
+#: handlers/users/main.py:45
+msgid "What language do you want to setup?"
+msgstr ""
+
+#: handlers/users/main.py:48 handlers/users/start.py:16
 msgid "Hello! I can help you to easy earn money!"
 msgstr ""
 
-#: keyboards/default/keyboards.py:6
-msgid "Put money 💳"
+#: keyboards/default/keyboards.py:8
+msgid "Put/Get money 💳"
 msgstr ""
 
-#: keyboards/default/keyboards.py:6
+#: keyboards/default/keyboards.py:8
 msgid "My account 💼"
 msgstr ""
 
-#: keyboards/default/keyboards.py:6
+#: keyboards/default/keyboards.py:8
 msgid "🇬🇧 Language"
+msgstr ""
+
+#: keyboards/default/keyboards.py:15
+msgid "⬅️ Cancel"
 msgstr ""
 

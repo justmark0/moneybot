@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-11 05:42+0300\n"
+"POT-Creation-Date: 2020-12-11 20:33+0300\n"
 "PO-Revision-Date: 2020-12-11 05:05+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -32,19 +32,54 @@ msgstr ""
 "Список комманд:\n"
 "/start - Перезапустить бота/help - Посмотреть список комманд"
 
-#: handlers/users/main.py:9 handlers/users/start.py:12
+#: handlers/users/main.py:21
+msgid "Main menu"
+msgstr "Главное меню"
+
+#: handlers/users/main.py:27
+msgid "Use keyboard to choose options"
+msgstr "Используйте клавиатуру чтобы выбрать опции"
+
+#: handlers/users/main.py:30
+#, fuzzy
+msgid "Language was updated successfully"
+msgstr "Язык был обновлен"
+
+#: handlers/users/main.py:37
+msgid "You can put money on your account using FKwalet"
+msgstr "Вы можете пополнить баланс используя FKwallet"
+
+#: handlers/users/main.py:41
+msgid "You are not registered use /start"
+msgstr "Вы не зарегестрированны, используйте /start"
+
+#: handlers/users/main.py:43
+#, fuzzy
+msgid "You have {money} rub on your account"
+msgstr "У вас {money} руб. на счету"
+
+#: handlers/users/main.py:45
+msgid "What language do you want to setup?"
+msgstr "Какой язык хотите использовать?"
+
+#: handlers/users/main.py:48 handlers/users/start.py:16
 msgid "Hello! I can help you to easy earn money!"
 msgstr "Привет! Я помогу тебе заработать деньги!"
 
-#: keyboards/default/keyboards.py:6
-msgid "Put money 💳"
-msgstr "Пополнить счет 💳"
+#: keyboards/default/keyboards.py:8
+#, fuzzy
+msgid "Put/Get money 💳"
+msgstr "Пополнить/Снять деньги 💳"
 
-#: keyboards/default/keyboards.py:6
+#: keyboards/default/keyboards.py:8
 msgid "My account 💼"
 msgstr "Мой аккаунт 💼"
 
-#: keyboards/default/keyboards.py:6
+#: keyboards/default/keyboards.py:8
 msgid "🇬🇧 Language"
 msgstr "🇷🇺 Язык"
+
+#: keyboards/default/keyboards.py:15
+msgid "⬅️ Cancel"
+msgstr "⬅️ Отмена"
 
