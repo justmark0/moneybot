@@ -6,7 +6,6 @@ from aiogram.dispatcher.handler import CancelHandler, current_handler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.utils.exceptions import Throttled
 
-from aiogram.contrib.middlewares.i18n import I18nMiddleware
 
 class ThrottlingMiddleware(BaseMiddleware):
     """
