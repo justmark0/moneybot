@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-13 03:02+0300\n"
+"POT-Creation-Date: 2020-12-13 17:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: handlers/users/commands.py:16
+#: handlers/users/commands.py:15
 msgid "Main menu"
 msgstr ""
 
-#: handlers/users/commands.py:22
+#: handlers/users/commands.py:21
 msgid ""
 "Hello! I can help you to earn money! Just send me money and you will get "
 "more in few days!\n"
@@ -31,7 +31,7 @@ msgid ""
 "/transactions - See list of your transactions"
 msgstr ""
 
-#: handlers/users/commands.py:33 handlers/users/messages.py:35
+#: handlers/users/commands.py:32 handlers/users/messages.py:50
 msgid "Hello! I can help you to easy earn money!"
 msgstr ""
 
@@ -51,25 +51,25 @@ msgstr ""
 msgid "You can choose how do you want to pay"
 msgstr ""
 
-#: handlers/users/inline.py:7
+#: handlers/users/inline.py:8
 msgid ""
 "**To put money in bot send amount of money you want to Payeer wallet:** "
 "__{wallet}__\n"
-"IT is NECESSARILY to write {code} in comments. Your account will not "
-"recive money if you will not do this.  In a minute your account deposit "
-"will update.\n"
+"IT is NECESSARILY to write {code} in comments and send ONLY rubles. Your "
+"account will not receive money if you will not do this.   In a minute "
+"your account deposit will update.\n"
 "https://payeer.com/"
 msgstr ""
 
-#: handlers/users/messages.py:20
+#: handlers/users/messages.py:21
 msgid "Choose what do you want to do"
 msgstr ""
 
-#: handlers/users/messages.py:25
+#: handlers/users/messages.py:26
 msgid "You are not registered use /start"
 msgstr ""
 
-#: handlers/users/messages.py:28
+#: handlers/users/messages.py:43
 msgid ""
 "Your account 🔐\n"
 "🔹You have {money} rub on your account\n"
@@ -78,7 +78,7 @@ msgid ""
 "You can see your transactions using /transactions"
 msgstr ""
 
-#: handlers/users/messages.py:32
+#: handlers/users/messages.py:47
 msgid "What language do you want to setup?"
 msgstr ""
 

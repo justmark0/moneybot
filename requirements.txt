@@ -10,9 +10,13 @@ chardet==3.0.4
 idna==2.10
 iso8601==0.1.13
 multidict==5.1.0
+pathlib==1.0.1
+payeer-api==0.1
 PyPika==0.44.1
+python-decouple==3.3
 python-dotenv==0.15.0
 pytz==2020.4
+requests==2.25.0
 tortoise==0.1.1
 tortoise-orm==0.16.18
 typing-extensions==3.7.4.3

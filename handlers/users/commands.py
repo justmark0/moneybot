@@ -7,7 +7,6 @@ from data.models import *
 from data.config import CANCEL_MESSAGE_LIST
 from aiogram.dispatcher.filters.builtin import CommandHelp
 from utils.misc import rate_limit
-from handlers.users.messages import get_all_locales
 
 
 @dp.message_handler(state='*', text=CANCEL_MESSAGE_LIST)
@@ -35,6 +34,6 @@ async def bot_start(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state="*", commands=['transactions'])
 async def bot_start(message: types.Message, state):
-    await state.fiinish()
+    await state.finish()
     await message.answer("Will be added a bit later")
     # TODO make transactions

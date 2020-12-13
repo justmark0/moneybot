@@ -15,7 +15,8 @@ DB_URL = os.getenv("DB_URL")
 
 # Payment settings
 PAYEER_WALLET_CODE = os.getenv("PAYEER_WALLET_CODE")
-
+PAYEER_API_ID = os.getenv("PAYEER_API_ID")
+PAYEER_API_PASS = os.getenv("PAYEER_API_PASS")
 
 # Middleware / Locales setup
 ALL_LOCALES = ['ru', 'en']
