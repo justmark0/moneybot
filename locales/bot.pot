@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-11 20:33+0300\n"
+"POT-Creation-Date: 2020-12-13 03:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,92 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: handlers/users/help.py:11
+#: handlers/users/commands.py:16
+msgid "Main menu"
+msgstr ""
+
+#: handlers/users/commands.py:22
 msgid ""
 "Hello! I can help you to earn money! Just send me money and you will get "
 "more in few days!\n"
 "List of commands:\n"
 "/start - Restart dialog\n"
-"/help - See list of commands"
+"/help - See list of commands\n"
+"/transactions - See list of your transactions"
 msgstr ""
 
-#: handlers/users/main.py:21
-msgid "Main menu"
-msgstr ""
-
-#: handlers/users/main.py:27
-msgid "Use keyboard to choose options"
-msgstr ""
-
-#: handlers/users/main.py:30
-msgid "Language was updated successfully"
-msgstr ""
-
-#: handlers/users/main.py:37
-msgid "You can put money on your account using FKwalet"
-msgstr ""
-
-#: handlers/users/main.py:41
-msgid "You are not registered use /start"
-msgstr ""
-
-#: handlers/users/main.py:43
-msgid "You have {money} rub on your account"
-msgstr ""
-
-#: handlers/users/main.py:45
-msgid "What language do you want to setup?"
-msgstr ""
-
-#: handlers/users/main.py:48 handlers/users/start.py:16
+#: handlers/users/commands.py:33 handlers/users/messages.py:35
 msgid "Hello! I can help you to easy earn money!"
 msgstr ""
 
-#: keyboards/default/keyboards.py:8
-msgid "Put/Get money 💳"
+#: handlers/users/fsm.py:14 handlers/users/fsm.py:33
+msgid "Use keyboard to choose options"
 msgstr ""
 
-#: keyboards/default/keyboards.py:8
+#: handlers/users/fsm.py:17
+msgid "Language was updated successfully"
+msgstr ""
+
+#: handlers/users/fsm.py:25
+msgid "You can put money in several ways:"
+msgstr ""
+
+#: handlers/users/fsm.py:26
+msgid "You can choose how do you want to pay"
+msgstr ""
+
+#: handlers/users/inline.py:7
+msgid ""
+"**To put money in bot send amount of money you want to Payeer wallet:** "
+"__{wallet}__\n"
+"IT is NECESSARILY to write {code} in comments. Your account will not "
+"recive money if you will not do this.  In a minute your account deposit "
+"will update.\n"
+"https://payeer.com/"
+msgstr ""
+
+#: handlers/users/messages.py:20
+msgid "Choose what do you want to do"
+msgstr ""
+
+#: handlers/users/messages.py:25
+msgid "You are not registered use /start"
+msgstr ""
+
+#: handlers/users/messages.py:28
+msgid ""
+"Your account 🔐\n"
+"🔹You have {money} rub on your account\n"
+"🔹You using this bot {date} days already\n"
+"\n"
+"You can see your transactions using /transactions"
+msgstr ""
+
+#: handlers/users/messages.py:32
+msgid "What language do you want to setup?"
+msgstr ""
+
+#: keyboards/default/keyboards.py:7
+msgid "Put or get money 💳"
+msgstr ""
+
+#: keyboards/default/keyboards.py:7
 msgid "My account 💼"
 msgstr ""
 
-#: keyboards/default/keyboards.py:8
+#: keyboards/default/keyboards.py:7
 msgid "🇬🇧 Language"
 msgstr ""
 
-#: keyboards/default/keyboards.py:15
+#: keyboards/default/keyboards.py:14 keyboards/default/keyboards.py:21
 msgid "⬅️ Cancel"
+msgstr ""
+
+#: keyboards/default/keyboards.py:21
+msgid "Put money 📈"
+msgstr ""
+
+#: keyboards/default/keyboards.py:21
+msgid "Get money 💰"
 msgstr ""
 
