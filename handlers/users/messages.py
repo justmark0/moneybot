@@ -18,22 +18,33 @@ async def update_all(days):
     for i in range(days):
         users = await User.all()
         for user in users:
-            await User.filter(user_id=user.user_id).\
+            await User.filter(user_id=user.user_id). \
                 update(income=(user.money + user.income) * DEPOSIT_COEFFICIENT - user.money)
 
 
 @dp.message_handler()
 async def bot_echo(message: types.Message):
-    if message.text in get_all_locales("Put or get money 💳"):
-        await message.answer(_("Choose what do you want to do"), reply_markup=put_get_money())
+    config_user = await User.get(user_id=1000)
+    if message.text in get_all_locales("Пополнить или снять деньги 💳"):
+        await message.answer(_("Выберите что хотите сделать"), reply_markup=put_get_money())
         await Money.next()
-    elif message.text in get_all_locales("My account 💼"):
+    elif message.text in get_all_locales("Инфо 📈"):
+        days = (datetime.now(timezone.utc) - config_user.reg_date).days + int(WORKING_FOR)
+        await message.answer(_("Всем доброго времени суток. Я Влад @VPankoff уже 5 год занимаюсь трейдом "
+                               "на крипте, спб и мск бирже. Я и мой друг решили помочь заработать тебе "
+                               "вкусить жить успешного трейдера. Всем кто хочет научиться трейдить "
+                               "переходи на канал моего друга {}, а если тебе и так хорошо"
+                               " получай процент от своих вложений, которые мы приумножим.\n"
+                               "🔸Бот работает уже  {} дней\n"
+                               "🔸Вот выплатил уже {} рублей").
+                             format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income))
+    elif message.text in get_all_locales("Мой аккаунт 💼"):
         config_user = await User.get(user_id=1000)
         await update_all((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
         await User.filter(user_id=1000).update(money=int((datetime.now(timezone.utc) - config_user.reg_date).days))
         user = await User.get_or_none(user_id=message.chat.id)
         if user is None:
-            await message.answer(_("You are not registered use /start"))
+            await message.answer(_("Вы не зарегестрированны, используйте /start"))
             return
 
         history = payeer.history()
@@ -59,13 +70,19 @@ async def bot_echo(message: types.Message):
 
         user_upd = await User.get_or_none(user_id=message.chat.id)
         days = datetime.now(timezone.utc) - user_upd.reg_date  # Subtracting dates to know for how long user using bot
-        await message.answer(_("Your account 🔐\n🔹You have {money} rub on your account\n🔹You can get {take} rub. from your account\n🔹You using this bot {date} days already\n🔹Tomorrow you will have {tomorrow}\n🔹Current deposit coefficient is {coef} %\n🔹You can see your transactions using /transactions").format(
+        await message.answer(_("Ваш аккаунт 🔐\n"
+                               "🔹У вас {money} руб. на счету.\n"
+                               "🔹Вы можете вывести {take} рублей\n"
+                               "🔹Вы пользуетесь {date} дней нашим ботом!\n"
+                               "🔹Завтра у вас будет {tomorrow} руб.\n"
+                               "🔹В настоящее время депозит состовляет {coef} % в день\n"
+                               "🔹Вы можете посмотреть вашу историю транзакций с помощью /transactions").format(
             money=float(user_upd.money) + float(user_upd.income), take=float(user_upd.income),
             date=days.days, tomorrow=(float(user_upd.money) + float(user_upd.income)) * DEPOSIT_COEFFICIENT,
-            coef=DEPOSIT_COEFFICIENT * 100), reply_markup=main_keyboard())
+            coef=round((DEPOSIT_COEFFICIENT - 1) * 100)), reply_markup=main_keyboard())
 
-    elif message.text in get_all_locales("🇬🇧 Language"):
-        await message.answer(_("What language do you want to setup?"), reply_markup=language_keyboard())
+    elif message.text in get_all_locales("🇷🇺 Язык"):
+        await message.answer(_("Какой язык хотите использовать?"), reply_markup=language_keyboard())
         await Language.next()
     else:
-        await message.answer(_('Hello! I can help you to easy earn money!'), reply_markup=main_keyboard())
+        await message.answer(_("Привет! Я помогу тебе заработать деньги!"), reply_markup=main_keyboard())
