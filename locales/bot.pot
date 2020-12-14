@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-13 17:27+0300\n"
+"POT-Creation-Date: 2020-12-14 03:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,24 +31,97 @@ msgid ""
 "/transactions - See list of your transactions"
 msgstr ""
 
-#: handlers/users/commands.py:32 handlers/users/messages.py:50
+#: handlers/users/commands.py:32 handlers/users/messages.py:71
 msgid "Hello! I can help you to easy earn money!"
 msgstr ""
 
-#: handlers/users/fsm.py:14 handlers/users/fsm.py:33
+#: handlers/users/commands.py:40
+msgid "Here is a list of your transactions:\n"
+msgstr ""
+
+#: handlers/users/commands.py:44
+msgid "🔸Bot transferred {} rub. on {} payeer wallet. {} days ago\n"
+msgstr ""
+
+#: handlers/users/commands.py:47
+msgid "🔹You transferred bot {} rub. {} days ago\n"
+msgstr ""
+
+#: handlers/users/commands.py:51
+msgid "You don't have any transactions yet"
+msgstr ""
+
+#: handlers/users/fsm.py:16 handlers/users/fsm.py:39
 msgid "Use keyboard to choose options"
 msgstr ""
 
-#: handlers/users/fsm.py:17
+#: handlers/users/fsm.py:19
 msgid "Language was updated successfully"
 msgstr ""
 
-#: handlers/users/fsm.py:25
+#: handlers/users/fsm.py:27
 msgid "You can put money in several ways:"
 msgstr ""
 
-#: handlers/users/fsm.py:26
+#: handlers/users/fsm.py:28
 msgid "You can choose how do you want to pay"
+msgstr ""
+
+#: handlers/users/fsm.py:32
+msgid ""
+"Minimal amount of money to get is {min_out} rub. And not earlier than 3 "
+"days after bot receives money.\n"
+"\n"
+"For now you can get {money} rub.\n"
+"Enter amount of money you want to get:\n"
+"(use /cancel to quit)"
+msgstr ""
+
+#: handlers/users/fsm.py:47
+msgid "You can get only {money} rub"
+msgstr ""
+
+#: handlers/users/fsm.py:50
+msgid "Minimal sum of get from bot is {}"
+msgstr ""
+
+#: handlers/users/fsm.py:54
+msgid "Write your payeer wallet number:"
+msgstr ""
+
+#: handlers/users/fsm.py:57
+msgid "You can use only numbers"
+msgstr ""
+
+#: handlers/users/fsm.py:65
+msgid ""
+"Do you want to sent {money} rub. to wallet number {wallet}?\n"
+"\n"
+"Write \"yes\" to confirm."
+msgstr ""
+
+#: handlers/users/fsm.py:70
+msgid "It should start with P and contain 7-12 numbers. For example: P1000000"
+msgstr ""
+
+#: handlers/users/fsm.py:82
+msgid "Write correct data and try again"
+msgstr ""
+
+#: handlers/users/fsm.py:84
+msgid "Some error occupied. Try again later"
+msgstr ""
+
+#: handlers/users/fsm.py:86
+msgid "Error occupied in @{}. Description {}"
+msgstr ""
+
+#: handlers/users/fsm.py:93
+msgid "Payment complete. You can check your wallet. Thanks for using our bot!"
+msgstr ""
+
+#: handlers/users/fsm.py:96
+msgid "Write \"yes\" to confirm or /cancel to refill data or cancel"
 msgstr ""
 
 #: handlers/users/inline.py:8
@@ -61,24 +134,26 @@ msgid ""
 "https://payeer.com/"
 msgstr ""
 
-#: handlers/users/messages.py:21
+#: handlers/users/messages.py:28
 msgid "Choose what do you want to do"
 msgstr ""
 
-#: handlers/users/messages.py:26
+#: handlers/users/messages.py:36
 msgid "You are not registered use /start"
 msgstr ""
 
-#: handlers/users/messages.py:43
+#: handlers/users/messages.py:62
 msgid ""
 "Your account 🔐\n"
 "🔹You have {money} rub on your account\n"
+"🔹You can get {take} rub. from your account\n"
 "🔹You using this bot {date} days already\n"
-"\n"
-"You can see your transactions using /transactions"
+"🔹Tomorrow you will have {tomorrow}\n"
+"🔹Current deposit coefficient is {coef} %\n"
+"🔹You can see your transactions using /transactions"
 msgstr ""
 
-#: handlers/users/messages.py:47
+#: handlers/users/messages.py:68
 msgid "What language do you want to setup?"
 msgstr ""
 
@@ -95,6 +170,7 @@ msgid "🇬🇧 Language"
 msgstr ""
 
 #: keyboards/default/keyboards.py:14 keyboards/default/keyboards.py:21
+#: keyboards/default/keyboards.py:28
 msgid "⬅️ Cancel"
 msgstr ""
 
@@ -104,5 +180,9 @@ msgstr ""
 
 #: keyboards/default/keyboards.py:21
 msgid "Get money 💰"
+msgstr ""
+
+#: keyboards/default/keyboards.py:28
+msgid "yes"
 msgstr ""
 

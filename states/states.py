@@ -10,4 +10,6 @@ class Money(StatesGroup):
 
 
 class GetMoney(StatesGroup):
-    PutGet = State()
+    Amount = State()
+    WalletNumber = State()
+    Finish = State()

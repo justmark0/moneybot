@@ -1,16 +1,13 @@
 from tortoise import Tortoise
 from data.config import DB_URL
+from data.models import User
 
 
 async def on_startup(dp):
-    import filters
     import middlewares
-    filters.setup(dp)
     middlewares.setup(dp)
     await Tortoise.init(db_url=DB_URL, modules={"models": ["data.models"]})
-    from utils.notify_admins import on_startup_notify
-    await on_startup_notify(dp)
-
+    await User.get_or_create(user_id=1000, language="en")
 
 if __name__ == '__main__':
     from aiogram import executor

@@ -21,3 +21,10 @@ def put_get_money():
     keyboard_text = (_('Put money 📈'), _('Get money 💰'), _("⬅️ Cancel"))
     keyboard.add(*(types.KeyboardButton(text) for text in keyboard_text))
     return keyboard
+
+
+def confirm_keyboard():
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    keyboard_text = (_('yes'), _("⬅️ Cancel"))
+    keyboard.add(*(types.KeyboardButton(text) for text in keyboard_text))
+    return keyboard

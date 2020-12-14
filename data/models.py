@@ -9,7 +9,8 @@ class User(Model):
     language = fields.CharField(max_length=2)
     is_blocked = fields.BooleanField(default=False)
     reg_date = fields.DatetimeField(auto_now=True)
-    money = fields.FloatField()
+    money = fields.FloatField(default=0)
+    income = fields.FloatField(default=0)
 
     class Meta:
         table = "user"
@@ -20,7 +21,7 @@ class User(Model):
 
 class Transaction(Model):
     id = fields.IntField(pk=True)
-    paying_sys_id = fields.BigIntField(index=True)
+    paying_sys_id = fields.BigIntField(index=True, null=True)
     user_id = fields.BigIntField()
     rub_amount = fields.FloatField()
     date = fields.DatetimeField(auto_now=True)

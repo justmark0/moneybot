@@ -9,11 +9,14 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 admins = [
     os.getenv("ADMIN_ID"),
 ]
+BOT_ALIAS = os.getenv('BOT_ALIAS')
 
 # Database setup
 DB_URL = os.getenv("DB_URL")
 
 # Payment settings
+DEPOSIT_COEFFICIENT = 1.02
+MIN_MONEY_OUT = 2
 PAYEER_WALLET_CODE = os.getenv("PAYEER_WALLET_CODE")
 PAYEER_API_ID = os.getenv("PAYEER_API_ID")
 PAYEER_API_PASS = os.getenv("PAYEER_API_PASS")
