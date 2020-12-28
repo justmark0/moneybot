@@ -37,6 +37,7 @@ class Transaction(Model):
 
 class Translations(Model):
     id = fields.IntField(pk=True)
+    code = fields.CharField(256)
     ru = fields.TextField()
     en = fields.TextField()
 

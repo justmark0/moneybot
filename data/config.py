@@ -18,7 +18,7 @@ DB_URL = os.getenv("DB_URL")
 # Payment settings
 DEPOSIT_COEFFICIENT = 1.02
 MIN_MONEY_OUT = 400
-PEOPLE = 108
+PEOPLE = os.getenv("PEOPLE")
 SENT_MONEY = os.getenv("SENT_MONEY")
 WORKING_FOR = os.getenv("WORKING_FOR")
 PAYEER_WALLET_CODE = os.getenv("PAYEER_WALLET_CODE")

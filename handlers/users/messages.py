@@ -4,6 +4,7 @@ from keyboards.inline.keyboards import *
 from data.models import *
 from data.config import *
 from states.states import *
+from middlewares.language_middleware import get_lang
 from datetime import datetime, timezone
 
 
@@ -31,15 +32,10 @@ async def bot_echo(message: types.Message):
     elif message.text in get_all_locales("Инфо 📈"):
         days = (datetime.now(timezone.utc) - config_user.reg_date).days + int(WORKING_FOR)
         people = len(list(await User.exclude(is_blocked=True)))
-        await message.answer(T("Всем доброго времени суток. Я Влад @VPankoff уже 5 год занимаюсь трейдом "
-                               "на крипте, спб и мск бирже. Я и мой друг решили помочь заработать тебе "
-                               "вкусить жить успешного трейдера. Всем кто хочет научиться трейдить "
-                               "переходи на канал моего друга {}, а если тебе и так хорошо"
-                               " получай процент от своих вложений, которые мы приумножим.\n"
-                               "🔸Бот работает уже  {} дней\n"
-                               "🔸Вот выплатил уже {} рублей\n"
-                               "🔸Зарегестрированно уже {} человек").
-                             format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income, people + PEOPLE))
+        user_language = await get_lang(message.chat.id) or 'en'
+        await message.answer((await T("info", user_language)).
+                             format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income, people + int(PEOPLE)))
+
     elif message.text in get_all_locales("Мой аккаунт 💼"):
         config_user = await User.get(user_id=1000)
         await update_all((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
@@ -68,7 +64,8 @@ async def bot_echo(message: types.Message):
                             update(money=float(user.money) + float(history[transaction_id]['creditedAmount']))
 
                     await Transaction(paying_sys_id=transaction_id, user_id=history[transaction_id]['comment'],
-                                      rub_amount=float(history[transaction_id]['creditedAmount']), bot_pay=bot_pay).save()
+                                      rub_amount=float(history[transaction_id]['creditedAmount']), bot_pay=bot_pay).\
+                        save()
 
         user_upd = await User.get_or_none(user_id=message.chat.id)
         days = datetime.now(timezone.utc) - user_upd.reg_date  # Subtracting dates to know for how long user using bot

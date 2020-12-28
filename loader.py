@@ -6,11 +6,14 @@ from data.models import Translations
 from payeer_api import PayeerAPI
 
 
-def T(message):
-    translation = await Translations.get_or_none(ru=message)
-    if translation is not None:
-        return translation.en
-    return message
+async def T(code, lang='ru'):
+    translation = await Translations.get_or_none(code=code)
+    if translation is None:
+        print(f"Fill translation in database for code: {code}")
+        raise
+    if lang == "ru":
+        return translation.ru
+    return translation.en
 
 
 bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
