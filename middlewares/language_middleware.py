@@ -15,4 +15,3 @@ class ACLMiddleware(I18nMiddleware):
         user = types.User.get_current()
         lang = await get_lang(user.id)
         return lang or "ru"
-        #user.language_code.split('-')[1]
