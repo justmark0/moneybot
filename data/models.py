@@ -4,7 +4,7 @@ from tortoise.models import Model
 
 class User(Model):
     id = fields.IntField(pk=True)
-    user_id = fields.BigIntField()
+    user_id = fields.BigIntField(unique=True)
     alias = fields.CharField(max_length=256, null=True)
     language = fields.CharField(max_length=2)
     is_blocked = fields.BooleanField(default=False)
@@ -46,3 +46,28 @@ class Translations(Model):
 
     def __str__(self):
         return f"ru:{self.ru}\n en:{self.en}"
+
+
+class CurrentTrans(Model):
+    id = fields.IntField(pk=True)
+    amount = fields.FloatField(unique=True)
+    user_id = fields.BigIntField(unique=True)
+    date = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "verifying_transactions"
+
+    def __str__(self):
+        return f"user:{self.user_id}, amount:{self.amount}, date:{self.date}"
+
+
+class FkHistory(Model):
+    id = fields.IntField(pk=True)
+    amount = fields.FloatField()
+    date = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "fkwallet_history"
+
+    def __str__(self):
+        return f"date:{self.date}, amount:{self.amount}"

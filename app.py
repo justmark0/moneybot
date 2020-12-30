@@ -1,11 +1,15 @@
 from tortoise import Tortoise
 from data.config import DB_URL
 from data.models import User
+import multiprocessing
+from utils.misc.updater import AsyncUpdate
 
 
 async def on_startup(dp):
     import middlewares
     middlewares.setup(dp)
+    update_process = multiprocessing.Process(target=AsyncUpdate().run)
+    update_process.start()
     await Tortoise.init(db_url=DB_URL, modules={"models": ["data.models"]})
     await User.get_or_create(user_id=1000, language="en")
 

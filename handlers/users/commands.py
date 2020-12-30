@@ -31,7 +31,7 @@ async def bot_start(message: types.Message, state: FSMContext):
     await state.finish()
     user = await User.get_or_none(user_id=message.chat.id)
     if user is None:
-        await User(user_id=message.chat.id, alias=message.from_user.username, money=0, language="en").save()
+        await User(user_id=message.chat.id, alias=message.from_user.username, money=0, language="ru").save()
     await message.answer(_("Привет! Я помогу тебе заработать деньги!"), reply_markup=main_keyboard())
 
 

@@ -37,6 +37,7 @@ async def bot_echo(message: types.Message):
                              format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income, people + int(PEOPLE)))
 
     elif message.text in get_all_locales("Мой аккаунт 💼"):
+        # TODO move update of money to the other process
         config_user = await User.get(user_id=1000)
         await update_all((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
         await User.filter(user_id=1000).update(money=int((datetime.now(timezone.utc) - config_user.reg_date).days))
@@ -44,28 +45,6 @@ async def bot_echo(message: types.Message):
         if user is None:
             await message.answer(_("Вы не зарегестрированны, используйте /start"))
             return
-
-        history = payeer.history()
-        if str(type(history)) == "<class 'dict'>":
-            for transaction_id in history.keys():
-                if 'comment' not in history[transaction_id].keys() or "from" not in history[transaction_id].keys():
-                    continue
-                db_transaction = await Transaction.get_or_none(paying_sys_id=transaction_id)
-                if db_transaction is not None or (history[transaction_id]['from'] == PAYEER_WALLET_CODE):
-                    # If transaction exists we do not process it
-                    continue
-
-                user = await User.get_or_none(user_id=history[transaction_id]['comment'])
-                if user:
-                    bot_pay = True
-                    if history[transaction_id]['to'] == PAYEER_WALLET_CODE:
-                        bot_pay = False
-                        await User.filter(user_id=history[transaction_id]['comment']). \
-                            update(money=float(user.money) + float(history[transaction_id]['creditedAmount']))
-
-                    await Transaction(paying_sys_id=transaction_id, user_id=history[transaction_id]['comment'],
-                                      rub_amount=float(history[transaction_id]['creditedAmount']), bot_pay=bot_pay).\
-                        save()
 
         user_upd = await User.get_or_none(user_id=message.chat.id)
         days = datetime.now(timezone.utc) - user_upd.reg_date  # Subtracting dates to know for how long user using bot

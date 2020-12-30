@@ -31,19 +31,21 @@ async def select_action(message: types.Message, state: FSMContext):
         user = await User.get_or_none(user_id=message.chat.id)
         await message.answer(_("Минимальная сумма вывода {min_out} рублей\nВы можете вывести {money} рублей.\nВведите "
                                "сумму которую хотите вывести:\n\n(можете исползовать /cancel чтобы выйти)").
-                             format(min_out=MIN_MONEY_OUT, money=user.income), reply_markup=types.ReplyKeyboardRemove())
+                             format(min_out=MIN_MONEY_OUT, money=(user.income + user.money)),
+                             reply_markup=types.ReplyKeyboardRemove())
         await state.finish()
         await GetMoney.next()
     else:
         await message.answer(_("Используйте клавиатуру чтобы выбрать возможные опции"))
 
 
+# TODO change system of adding deposit money
 @dp.message_handler(state=GetMoney.Amount)
 async def select_amount(message: types.message, state: FSMContext):
     if re.fullmatch(r"[+-]?([0-9]*[.])?[0-9]+", message.text):
         user = await User.get_or_none(user_id=message.chat.id)
-        if float(message.text) > user.income:
-            await message.answer(_("Вы можете вывести только {money} рублей").format(money=user.income))
+        if float(message.text) > user.money:
+            await message.answer(_("Вы можете вывести только {money} рублей").format(money=user.money))
             return
         if float(message.text) < MIN_MONEY_OUT:
             await message.answer(_("Минимальная сумма которую можно вывести из бота {} рублей").format(MIN_MONEY_OUT))
@@ -68,7 +70,8 @@ async def select_wallet(message: types.Message, state: FSMContext):
     else:
         await message.answer(_("Номер кошелька начинается с P и содержит 7-12 цифр. Например P1000000"))
 
-#TODO set up correctly payment (how much person can get, and - for money of user)
+
+# TODO set up correctly payment (how much person can get, and - for money of user)
 @dp.message_handler(state=GetMoney.Finish)
 async def finish_check(message: types.Message, state: FSMContext):
     await GetMoney.next()
@@ -78,9 +81,11 @@ async def finish_check(message: types.Message, state: FSMContext):
                 res = payeer.transfer(data['amount'], data["wallet_code"], "RUB", "RUB", comment=str(message.chat.id))
             except PayeerAPIException as error:
                 if str(repr(error)) == "PayeerAPIException(['transferHimselfForbidden'])":
-                    await message.answer(_("Напишите правильные данные и попробуйте заново"), reply_markup=main_keyboard())
+                    await message.answer(_("Напишите правильные данные и попробуйте заново"),
+                                         reply_markup=main_keyboard())
                 else:
-                    await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"), reply_markup=main_keyboard())
+                    await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"),
+                                         reply_markup=main_keyboard())
                     for id_a in admins:
                         await bot.send_message(id_a, _("Произошла ошибка в боте @{}. Описание: {}").
                                                format(BOT_ALIAS, str(repr(error))))
