@@ -1,9 +1,9 @@
+from datetime import datetime, timezone
 from data.config import *
 from tortoise import Tortoise
 from .logging import logging
 from loader import payeer, bot
 from data.models import *
-from datetime import datetime
 import requests
 import asyncio
 import hashlib
@@ -27,8 +27,6 @@ class AsyncUpdate:
             res_str = requests.post("https://www.fkwallet.ru/api_v1.php", data=data)
             res = json.loads(res_str.text)
             last_amount_fk = await FkHistory.all().order_by('-id').first()
-            all = await FkHistory.all()
-            print(all)
             rub_now = None
             if str(type(res)) == "<class 'dict'>":
                 if "data" in res.keys():
@@ -89,6 +87,18 @@ class AsyncUpdate:
                             save()
 
             # TODO check if users can reg several times. If yes. Delete duplicates each 100 cycles
+            # Deleting old transactions
+            all_trans = await CurrentTrans.all()
+            for current in all_trans:
+                now = datetime.now(timezone.utc)
+                tim = str(now - current.date).split(" days, ")
+                if len(tim) > 1:
+                    minutes = int(tim[0] * 24 * 60) + int(tim[1].split(":")[0] * 60) + int(tim[1].split(":")[1])
+                else:
+                    minutes = int(tim[0].split(":")[0] * 60) + int(tim[0].split(":")[1])
+                if minutes > TTL_TRANSACTION:
+                    await OldTrans(user_id=current.user_id, amount=current.amount, date=current.date).save()
+                    await CurrentTrans.filter(id=current.id).delete()
 
             logging.info(f"run for {time.time() - start_time} will sleep for {request_each - (time.time() - start_time)}")
             time.sleep(request_each - (time.time() - start_time))

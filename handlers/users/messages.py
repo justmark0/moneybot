@@ -57,7 +57,7 @@ async def bot_echo(message: types.Message):
                                "🔹Вы можете посмотреть вашу историю транзакций с помощью /transactions").format(
             money=float(user_upd.money) + float(user_upd.income), take=float(user_upd.income),
             date=days.days, tomorrow=(float(user_upd.money) + float(user_upd.income)) * DEPOSIT_COEFFICIENT,
-            coef=round((DEPOSIT_COEFFICIENT - 1) * 100)), reply_markup=main_keyboard())
+            coef=round((DEPOSIT_COEFFICIENT - 1) * 100, 1)), reply_markup=main_keyboard())
 
     elif message.text in get_all_locales("🇷🇺 Язык"):
         await message.answer(_("Какой язык хотите использовать?"), reply_markup=language_keyboard())

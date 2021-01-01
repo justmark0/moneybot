@@ -61,6 +61,19 @@ class CurrentTrans(Model):
         return f"user:{self.user_id}, amount:{self.amount}, date:{self.date}"
 
 
+class OldTrans(Model):
+    id = fields.IntField(pk=True)
+    amount = fields.FloatField(unique=True)
+    user_id = fields.BigIntField(unique=True)
+    date = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "old_transactions"
+
+    def __str__(self):
+        return f"user:{self.user_id}, amount:{self.amount}, date:{self.date}"
+
+
 class FkHistory(Model):
     id = fields.IntField(pk=True)
     amount = fields.FloatField()

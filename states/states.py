@@ -13,3 +13,7 @@ class GetMoney(StatesGroup):
     Amount = State()
     WalletNumber = State()
     Finish = State()
+
+class PutMoney(StatesGroup):
+    Amount = State()
+    Finish = State()

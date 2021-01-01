@@ -17,7 +17,7 @@ DB_URL = os.getenv("DB_URL")
 
 # Updater setup
 request_each = 20  # in seconds
-
+TTL_TRANSACTION = 10  # in minutes
 
 # Payment settings
 DEPOSIT_COEFFICIENT = 1.02
