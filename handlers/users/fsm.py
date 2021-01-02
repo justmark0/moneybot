@@ -14,12 +14,12 @@ import json
 import re
 
 
-async def notify_admins_about_error(message, error_text):
+async def notify_admins_about_error(message, system, error_text):
     await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"),
                          reply_markup=main_keyboard())
     for id_a in admins:
-        await bot.send_message(id_a, _("#error\nПроизошла ошибка в боте @{}. Описание: {}").
-                               format(BOT_ALIAS, error_text))
+        await bot.send_message(id_a, _("#error\nПроизошла ошибка в боте @{}. Система {}.Описание: {}").
+                               format(BOT_ALIAS, system, error_text))
 
 
 @dp.message_handler(state=Language.NewLanguage)
@@ -113,12 +113,12 @@ async def finish_check(message: types.Message, state: FSMContext):
                 res_str = requests.post("https://www.fkwallet.ru/api_v1.php", data=data_req)
                 res = json.loads(res_str.text)
                 if "desc" not in res.keys():
-                    await notify_admins_about_error(message, f"Responce starts with: "
+                    await notify_admins_about_error(message, 'fkwallet', f"Responce starts with: "
                                                              f"{res_str.text[:max(len(res_str.text) - 1, 100):]}")
                     await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"))
                     return
                 if res['desc'] != "Payment send":
-                    await notify_admins_about_error(message, f"Responce starts with: "
+                    await notify_admins_about_error(message, 'fkwallet', f"Responce starts with: "
                                                              f"{res_str.text[:max(len(res_str.text) - 1, 100):]}")
                     await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"))
                     return
@@ -132,7 +132,7 @@ async def finish_check(message: types.Message, state: FSMContext):
                                              reply_markup=main_keyboard())
                         return
                     else:
-                        await notify_admins_about_error(message, str(repr(error)))
+                        await notify_admins_about_error(message, 'payeer', str(repr(error)))
                         await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"))
                         return
             await Transaction(paying_sys_id=200, user_id=message.chat.id, rub_amount=data['amount'],

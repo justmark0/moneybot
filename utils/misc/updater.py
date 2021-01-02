@@ -17,6 +17,21 @@ class AsyncUpdate:
     def __init__(self):
         pass
 
+    def divide_users(self, div, index, a, n, ans, sum_l):
+        if index == n:
+            loc_ans = []
+            loc_sum = 0
+            for i in range(n):
+                if div[i] == 1:
+                    loc_ans.append(a[i])
+                    loc_sum += a[i]
+            if loc_sum == sum_l:
+                ans.append(loc_ans)
+        else:
+            for i in range(2):
+                div[index] = i
+                self.divide_users(div, index + 1, a, n, ans, sum_l)
+
     async def update(self, bot):
         counter = 0
         work_time = 0
@@ -43,28 +58,53 @@ class AsyncUpdate:
                 logging.error(f"{datetime.now(tz=None)} Error recieving data from Fkwallet. Response starts with "
                               f"{res_str.text[:max(len(res_str.text) - 1, 100):]}")
             else:
-                # TODO add several transactions may be made between receiving updates
                 if last_amount_fk.amount != float(res['data']['RUR']):
                     await FkHistory(amount=res['data']['RUR']).save()
                 if last_amount_fk.amount < float(res['data']['RUR']):
                     increase = float(res['data']['RUR']) - last_amount_fk.amount
-                    current_transaction = await CurrentTrans.get_or_none(amount=float(increase))
 
-                    if current_transaction is None:  # Didn't found user
-                        all_current_message = "#warning\nFkWallet received money but didn't find person who sent " \
-                                              "money. All current transactions: "
+                    all_trans = await CurrentTrans.all()
+                    div_n = len(all_trans)
+                    div_list = []
+                    divided = []
+                    div_index = 0
+                    div_working_list = [0] * div_n
+                    for a in all_trans:
+                        div_list.append(a.amount)
+                    self.divide_users(div_working_list, div_index, div_list, div_n, divided, increase)
+
+                    print(f"divided {divided}")
+
+                    # current_transaction = await CurrentTrans.get_or_none(amount=float(increase))
+                    if len(divided) == 0:  # Could't find users
+                        all_current_message = "#warning\nFkWallet received {} rubles  but didn't find users who sent" \
+                                              "money. All current transactions: ".format(increase)
                         all_current = await CurrentTrans.all()
                         for current in all_current:
                             all_current_message += "\n" + str(current)
                         for admin in admins:
                             await bot.send_message(admin, all_current_message)
-                    else:  # Found user
-                        await Transaction(user_id=current_transaction.user_id, rub_amount=increase, bot_pay=False,
-                                          system="fkwallet").save()
-                        user = await User.get(user_id=current_transaction.user_id)
-                        await User.filter(user_id=current_transaction.user_id).update(money=(user.money + increase))
-                        await bot.send_message(current_transaction.user_id, _("Ваш счет пополнен на {} рублей").
-                                               format(increase))
+                    elif len(divided) == 1:  # Found one way t divide users
+                        for i in divided[0]:
+                            current_transaction = await CurrentTrans.get(amount=i)
+                            await Transaction(user_id=current_transaction.user_id, rub_amount=increase, bot_pay=False,
+                                              system="fkwallet").save()
+                            user = await User.get(user_id=current_transaction.user_id)
+                            await User.filter(user_id=current_transaction.user_id).update(money=(user.money + increase))
+                            await bot.send_message(current_transaction.user_id, _("Ваш счет пополнен на {} рублей").
+                                                   format(increase))
+                    else:  # Found more than one way to divide users
+                        await bot.send_message("#error\nFkwalet got money({} rubles) and found several ways to "
+                                               "distribute them between users. Here they are:".format(increase))
+                        for div in divided:
+                            message = ""
+                            for amount in div:
+                                cur_usr = await CurrentTrans.get(amount=amount)
+                                usr = await User.get(user_id=cur_usr.user_id)
+                                message += f"Alias: {usr.alias or ' '}; amount: {cur_usr.amount}"
+                            for admin_l in admins:
+                                await bot.send_message(admin_l, message)
+
                 #  If Fkwallet lost money
                 elif last_amount_fk.amount > float(res['data']['RUR']):
                     if SEND_MESSAGE_IF_LOST:
@@ -111,6 +151,7 @@ class AsyncUpdate:
 
             work_time += time.time() - start_time
             if counter % 100 == 0:
+                counter = 0
                 #  Deposit updater
                 config_user = await User.get(user_id=1000)
                 times = ((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
@@ -129,8 +170,8 @@ class AsyncUpdate:
                 logging.info(f"Average run for {work_time / 100}; Average sleep sleep for "
                              f"{request_each - (work_time / 100)}")
                 work_time = 0
-
-            time.sleep(request_each - (time.time() - start_time))
+            if request_each - (time.time() - start_time) > 0.5:
+                time.sleep(request_each - (time.time() - start_time))
 
     def run(self):
         bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)

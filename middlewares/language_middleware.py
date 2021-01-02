@@ -1,7 +1,7 @@
+from aiogram.contrib.middlewares.i18n import I18nMiddleware
 from typing import Any, Tuple
 from data.models import User
 from aiogram import types
-from aiogram.contrib.middlewares.i18n import I18nMiddleware
 
 
 async def get_lang(user_id):

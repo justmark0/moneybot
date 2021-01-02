@@ -1,10 +1,10 @@
-from loader import dp, _
 from keyboards.default.keyboards import *
 from keyboards.inline.keyboards import *
+from datetime import datetime, timezone
+from states.states import *
 from data.models import *
 from data.config import *
-from states.states import *
-from datetime import datetime, timezone
+from loader import dp, _
 
 
 def get_all_locales(message):

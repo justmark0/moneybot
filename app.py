@@ -1,8 +1,8 @@
-from tortoise import Tortoise
+from utils.misc.updater import AsyncUpdate
 from data.config import DB_URL
+from tortoise import Tortoise
 from data.models import User
 import multiprocessing
-from utils.misc.updater import AsyncUpdate
 
 
 async def on_startup(dp):

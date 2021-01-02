@@ -1,8 +1,8 @@
-from aiogram.types import ParseMode
-from loader import dp, _
 from data.config import PAYEER_WALLET_CODE
-from aiogram import types
+from aiogram.types import ParseMode
 from states.states import PutMoney
+from aiogram import types
+from loader import dp, _
 
 
 @dp.callback_query_handler(text='payeer')

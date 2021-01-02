@@ -1,11 +1,11 @@
+from data.config import CANCEL_MESSAGE_LIST
 from aiogram.dispatcher import FSMContext
-from loader import dp, _
 from keyboards.default.keyboards import *
 from keyboards.inline.keyboards import *
-from data.models import *
-from data.config import CANCEL_MESSAGE_LIST
-from utils.misc import rate_limit
 from datetime import datetime, timezone
+from utils.misc import rate_limit
+from data.models import *
+from loader import dp, _
 
 
 @dp.message_handler(state='*', text=CANCEL_MESSAGE_LIST)
@@ -45,7 +45,7 @@ async def bot_start(message: types.Message, state):
             days = datetime.now(timezone.utc) - transaction.date
             if transaction.bot_pay:
                 message_text += _("🔸Бот отправил {} рублей на {} {} кошелек {} дней назад\n"). \
-                    format(transaction.rub_amount, transaction.wallet_number, days.days)
+                    format(transaction.rub_amount, transaction.system, transaction.wallet_number, days.days)
             else:
                 message_text += _("🔹Вы перевели боту {} рублей {} дней назад\n"). \
                     format(transaction.rub_amount, days.days)
