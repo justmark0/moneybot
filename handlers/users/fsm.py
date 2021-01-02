@@ -107,10 +107,14 @@ async def finish_check(message: types.Message, state: FSMContext):
 @dp.message_handler(state=PutMoney.Amount)
 async def select_wallet(message: types.Message, state: FSMContext):
     if re.fullmatch(r"[0-9]+(\.[0-9]+)?", message.text):
+        exist = await CurrentTrans.get_or_none(amount=float(message.text))
+        if exist is None:
+            await message.answer(_("Пожалуйста поменяйте сумму(можно на рубль). Или попробуйте снова через {t} минут").
+                                 format(t=TTL_TRANSACTION))
+            return
         async with state.proxy() as data:
-            await CurrentTrans(user_id=message.chat.id, amount=float(message.text))
             data['amount'] = message.text
-            await message.answer(_(f"Вы хотите пополнить счет на {data['amount']} рублей?"),
+            await message.answer(_("Вы хотите пополнить счет на {amount} рублей?").format(amount=data['amount']),
                                  reply_markup=confirm_keyboard())
             await PutMoney.next()
     else:
@@ -121,14 +125,16 @@ async def select_wallet(message: types.Message, state: FSMContext):
 async def select_wallet(message: types.Message, state: FSMContext):
     if message.text in get_all_locales("да"):
         async with state.proxy() as data:
-            await message.answer(_("💰*Для пополнения вашего баланса переведите {amount} на кошелек Fkwallet:* `{"
+            amount = data['amount'].replace(".", "\.")
+            await message.answer(_("💰*Для пополнения вашего баланса переведите {amount} рублей на кошелек Fkwallet:* `{"
                                    "wallet}`\nПополняйте ТОЛЬКО *рублевым* счетом\. Пополните счет в течении {ttl} "
                                    "минут\. Если вам не хватило этого времени можете снова написать боту сколько "
                                    "хотите пополнить и пополнить в течении {ttl} минут\. При возникнивении проблем "
-                                   "пишите @VPankoff\!В течении минуты ваш счет обновится\.\n"
+                                   "пишите @VPankoff\!В течении минуты после пополнения ваш счет обновится\.\n"
                                    "https://www\.fkwallet\.ru/ "
-                                   ).format(amount=data['amount'], wallet=FKWALLET_WALLET_CODE, ttl=TTL_TRANSACTION),
+                                   ).format(amount=amount, wallet=FKWALLET_WALLET_CODE, ttl=TTL_TRANSACTION),
                                  parse_mode=ParseMode.MARKDOWN_V2, reply_markup=main_keyboard())
+            await CurrentTrans(user_id=message.chat.id, amount=float(data['amount'])).save()
             await PutMoney.next()
     else:
         await message.answer(_("Напишите \"да\" чтобы подтвердить или /cancel чтобы отменить или переписать данные"))

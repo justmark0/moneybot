@@ -4,6 +4,7 @@ from data.config import PAYEER_WALLET_CODE
 from aiogram import types
 from states.states import PutMoney
 
+
 @dp.callback_query_handler(text='payeer')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.message.edit_text(_("💰*Для пополнения вашего баланса переведите нужную сумму на кошелек "
@@ -16,8 +17,9 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                                   format(wallet=PAYEER_WALLET_CODE, code=query.message.chat.id),
                                   parse_mode=ParseMode.MARKDOWN_V2)
 
+
 @dp.callback_query_handler(text='fkwallet')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-    await query.message.answer(_("Для пополнения счета с помощью [Fkwallet](https://www.fkwallet.ru/)  напишите "
+    await query.message.answer(_("Для пополнения счета с помощью [Fkwallet](https://www\.fkwallet\.ru/)  напишите "
                                  "сколько вы хотите пополнить:"), parse_mode=ParseMode.MARKDOWN_V2)
     await PutMoney.next()

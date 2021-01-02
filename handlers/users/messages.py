@@ -1,4 +1,4 @@
-from loader import dp, _, payeer, T
+from loader import dp, _, payeer
 from keyboards.default.keyboards import *
 from keyboards.inline.keyboards import *
 from data.models import *
@@ -33,7 +33,12 @@ async def bot_echo(message: types.Message):
         days = (datetime.now(timezone.utc) - config_user.reg_date).days + int(WORKING_FOR)
         people = len(list(await User.exclude(is_blocked=True)))
         user_language = await get_lang(message.chat.id) or 'en'
-        await message.answer((await T("info", user_language)).
+        await message.answer(_("Всем доброго времени суток. Я Влад @VPankoff уже 5 год занимаюсь трейдом на крипте, "
+                               "спб и мск бирже. Я и мой друг решили помочь заработать тебе вкусить жить успешного "
+                               "трейдера. Всем кто хочет научиться трейдить переходи на канал моего друга {}, "
+                               "а если тебе и так хорошо получай процент от своих вложений, которые мы "
+                               "приумножим.\n🔸Бот работает уже  {} дней\n🔸Вот выплатил уже {} "
+                               "рублей\n🔸Зарегестрированно уже {} человек").
                              format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income, people + int(PEOPLE)))
 
     elif message.text in get_all_locales("Мой аккаунт 💼"):

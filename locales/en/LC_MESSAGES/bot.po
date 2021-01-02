@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-12-29 01:16+0300\n"
+"POT-Creation-Date: 2021-01-02 02:34+0300\n"
 "PO-Revision-Date: 2020-12-14 16:35+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -38,7 +38,7 @@ msgstr ""
 "/help - See list of commands\n"
 "/transactions - See list of your transactions"
 
-#: handlers/users/commands.py:35 handlers/users/messages.py:87
+#: handlers/users/commands.py:35 handlers/users/messages.py:71
 msgid "Привет! Я помогу тебе заработать деньги!"
 msgstr "Hello! I can help you to easy earn money!"
 
@@ -58,23 +58,23 @@ msgstr "🔹You transferred bot {} rub. {} days ago\n"
 msgid "У вас еще нет транзакций"
 msgstr "You don't have any transactions yet"
 
-#: handlers/users/fsm.py:16 handlers/users/fsm.py:38
+#: handlers/users/fsm.py:18 handlers/users/fsm.py:41
 msgid "Используйте клавиатуру чтобы выбрать возможные опции"
 msgstr "Use keyboard to choose options"
 
-#: handlers/users/fsm.py:19
+#: handlers/users/fsm.py:21
 msgid "Язык был обновлен"
 msgstr "Language was updated successfully"
 
-#: handlers/users/fsm.py:27
+#: handlers/users/fsm.py:29
 msgid "Вы можете пополнить счет несколькими способами:"
 msgstr "You can put money in several ways:"
 
-#: handlers/users/fsm.py:28
+#: handlers/users/fsm.py:30
 msgid "Можете выбрать ниже какими способами пополнить счет"
 msgstr "You can choose how do you want to pay"
 
-#: handlers/users/fsm.py:32
+#: handlers/users/fsm.py:34
 msgid ""
 "Минимальная сумма вывода {min_out} рублей\n"
 "Вы можете вывести {money} рублей.\n"
@@ -87,23 +87,23 @@ msgstr ""
 "Enter amount of money you want to get:\n"
 "(use /cancel to quit)"
 
-#: handlers/users/fsm.py:46
+#: handlers/users/fsm.py:50
 msgid "Вы можете вывести только {money} рублей"
 msgstr "You can get only {money} rub"
 
-#: handlers/users/fsm.py:49
+#: handlers/users/fsm.py:53
 msgid "Минимальная сумма которую можно вывести из бота {} рублей"
 msgstr "Minimal sum of get from bot is {}"
 
-#: handlers/users/fsm.py:53
+#: handlers/users/fsm.py:57
 msgid "Введите ваш номер вашего Payeer кошелька"
 msgstr "Write your Payeer wallet number:"
 
-#: handlers/users/fsm.py:56
+#: handlers/users/fsm.py:60
 msgid "Вы можете использовать только цифры"
 msgstr "You can use only numbers"
 
-#: handlers/users/fsm.py:64
+#: handlers/users/fsm.py:68
 msgid ""
 "Вы уверены что хотите выслать {money} рублей на кошелек {wallet}?\n"
 "\n"
@@ -113,31 +113,60 @@ msgstr ""
 "\n"
 "Write \"yes\" to confirm."
 
-#: handlers/users/fsm.py:69
+#: handlers/users/fsm.py:73
 msgid "Номер кошелька начинается с P и содержит 7-12 цифр. Например P1000000"
 msgstr "It should start with P and contain 7-12 numbers. For example: P1000000"
 
-#: handlers/users/fsm.py:81
+#: handlers/users/fsm.py:86
 msgid "Напишите правильные данные и попробуйте заново"
 msgstr "Write correct data and try again"
 
-#: handlers/users/fsm.py:83
+#: handlers/users/fsm.py:89
 msgid "Произошла ошибка. Попробуйте снова немного позже"
 msgstr "Some error occupied. Try again later"
 
-#: handlers/users/fsm.py:85
+#: handlers/users/fsm.py:92
 msgid "Произошла ошибка в боте @{}. Описание: {}"
 msgstr "Error occupied in @{}. Description {}"
 
-#: handlers/users/fsm.py:94
+#: handlers/users/fsm.py:101
 msgid "Оплата завершена. спасибо что используете нашего бота!"
 msgstr "Payment complete. You can check your wallet. Thanks for using our bot!"
 
-#: handlers/users/fsm.py:97
+#: handlers/users/fsm.py:104 handlers/users/fsm.py:134
 msgid ""
 "Напишите \"да\" чтобы подтвердить или /cancel чтобы отменить или "
 "переписать данные"
 msgstr "Write \"yes\" to confirm or /cancel to refill data or cancel"
+
+#: handlers/users/fsm.py:113
+msgid "Вы хотите пополнить счет на {amount} рублей?"
+msgstr "Do you want to send {amount} rubles to your account?"
+
+#: handlers/users/fsm.py:117
+msgid ""
+"Вводите только числа. Если хотите использовать нецелые числа пишите через"
+" точку"
+msgstr "Enter only numbers. If necessary use dot. Example: 100, 105.5, 371.9"
+
+#: handlers/users/fsm.py:124
+msgid ""
+"💰*Для пополнения вашего баланса переведите {amount} на кошелек Fkwallet:*"
+" `{wallet}`\n"
+"Пополняйте ТОЛЬКО *рублевым* счетом\\. Пополните счет в течении {ttl} "
+"минут\\. Если вам не хватило этого времени можете снова написать боту "
+"сколько хотите пополнить и пополнить в течении {ttl} минут\\. При "
+"возникнивении проблем пишите @VPankoff\\!В течении минуты ваш счет "
+"обновится\\.\n"
+"https://www\\.fkwallet\\.ru/ "
+msgstr ""
+"💰*To put money in bot send {amount} rubles to Fkwallet:* `{wallet}`\n"
+"It is NECESSARILY to send ONLY *rubles*\\. Fund your account within {ttl}"
+" minutes \\. If this time is not enough for you, you can write to the bot"
+" againhow much you want to sent and send it within {ttl} minutes \\.If "
+"you will have any problems, write to @VPankoff. Your account will not "
+"receive money if you will not do this\\.\n"
+"https://www\\.fkwallet\\.ru/"
 
 #: handlers/users/inline.py:9
 #, fuzzy
@@ -155,15 +184,42 @@ msgstr ""
 " Your account will not receive money if you will not do this\\.\n"
 "https://payeer\\.com/"
 
+#: handlers/users/inline.py:21
+msgid ""
+"Для пополнения счета с помощью [Fkwallet](https://www.fkwallet.ru/)  "
+"напишите сколько вы хотите пополнить:"
+msgstr ""
+"To send money to your account using [Fkwallet] "
+"(https://www.fkwallet.ru/)write how much you want to send:"
+
 #: handlers/users/messages.py:30
 msgid "Выберите что хотите сделать"
 msgstr "Choose what do you want to do"
 
-#: handlers/users/messages.py:45
+#: handlers/users/messages.py:36
+msgid ""
+"Всем доброго времени суток. Я Влад @VPankoff уже 5 год занимаюсь трейдом "
+"на крипте, спб и мск бирже. Я и мой друг решили помочь заработать тебе "
+"вкусить жить успешного трейдера. Всем кто хочет научиться трейдить "
+"переходи на канал моего друга {}, а если тебе и так хорошо получай "
+"процент от своих вложений, которые мы приумножим.\n"
+"🔸Бот работает уже  {} дней\n"
+"🔸Вот выплатил уже {} рублей\n"
+"🔸Зарегестрированно уже {} человек"
+msgstr ""
+"Hello, I am Vlad @VPankoff for 5 years now I have been trading on the "
+"crypto, St. Petersburg and Moscow stock exchange. My friend and I decided"
+" to help you earn a taste of living as a successful trader. For everyone "
+"who wants to learn how to trade, go to my friend's channel {}, and if you"
+" are already good, get a percentage of your investments, which we will "
+"increase.\n🔸Bot working already {} days\n🔸Bot sent {} rubles\n🔸Bot maintain {} "
+"users"
+
+#: handlers/users/messages.py:51
 msgid "Вы не зарегестрированны, используйте /start"
 msgstr "You are not registered use /start"
 
-#: handlers/users/messages.py:72
+#: handlers/users/messages.py:56
 msgid ""
 "Ваш аккаунт 🔐\n"
 "🔹У вас {money} руб. на счету.\n"
@@ -181,7 +237,7 @@ msgstr ""
 "🔹Current deposit coefficient is {coef} %\n"
 "🔹You can see your transactions using /transactions"
 
-#: handlers/users/messages.py:84
+#: handlers/users/messages.py:68
 msgid "Какой язык хотите использовать?"
 msgstr "What language do you want to setup?"
 

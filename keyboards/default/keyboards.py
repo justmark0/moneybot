@@ -4,7 +4,7 @@ from loader import _
 
 def main_keyboard(locale=None):
     keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    if locale is not None:
+    if locale is None:
         keyboard_text = (_("Пополнить или снять деньги 💳"), _("Мой аккаунт 💼"), _("Инфо 📈"), _("🇷🇺 Язык"))
     else:
         keyboard_text = (_("Пополнить или снять деньги 💳", locale=locale), _("Мой аккаунт 💼", locale=locale),

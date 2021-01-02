@@ -16,10 +16,12 @@ class AsyncUpdate:
         pass
 
     async def update(self):
+        counter = 0
+        work_time = 0
         await Tortoise.init(db_url=DB_URL, modules={"models": ["data.models"]})  # Connecting new process to Database
         while True:  # main loop
             start_time = time.time()
-
+            counter += 1
             # Fkwallet updater
             sign_str = FKWALLET_WALLET_CODE + FKWALLET_API_KEY
             sign = hashlib.md5(sign_str.encode()).hexdigest()
@@ -86,7 +88,6 @@ class AsyncUpdate:
                                           rub_amount=float(history[transaction_id]['creditedAmount']), bot_pay=bot_pay). \
                             save()
 
-            # TODO check if users can reg several times. If yes. Delete duplicates each 100 cycles
             # Deleting old transactions
             all_trans = await CurrentTrans.all()
             for current in all_trans:
@@ -96,11 +97,16 @@ class AsyncUpdate:
                     minutes = int(tim[0] * 24 * 60) + int(tim[1].split(":")[0] * 60) + int(tim[1].split(":")[1])
                 else:
                     minutes = int(tim[0].split(":")[0] * 60) + int(tim[0].split(":")[1])
-                if minutes > TTL_TRANSACTION:
+                if minutes > TTL_TRANSACTION - 1:
                     await OldTrans(user_id=current.user_id, amount=current.amount, date=current.date).save()
                     await CurrentTrans.filter(id=current.id).delete()
 
-            logging.info(f"run for {time.time() - start_time} will sleep for {request_each - (time.time() - start_time)}")
+            work_time += time.time() - start_time
+            if counter % 100 == 0:
+                logging.info(f"Average run for {work_time / 100}; Average sleep sleep for "
+                             f"{request_each - (work_time / 100)}")
+                work_time = 0
+
             time.sleep(request_each - (time.time() - start_time))
 
     def run(self):
