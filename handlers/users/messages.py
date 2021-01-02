@@ -29,7 +29,8 @@ async def bot_echo(message: types.Message):
                                "а если тебе и так хорошо получай процент от своих вложений, которые мы "
                                "приумножим.\n🔸Бот работает уже  {} дней\n🔸Вот выплатил уже {} "
                                "рублей\n🔸Зарегестрированно уже {} человек").
-                             format(CHANNEL_NAME, days, float(SENT_MONEY) + config_user.income, people + int(PEOPLE)))
+                             format(CHANNEL_NAME, days, round(float(SENT_MONEY) + config_user.income, 2),
+                                    people + int(PEOPLE)))
 
     elif message.text in get_all_locales("Мой аккаунт 💼"):
         user = await User.get_or_none(user_id=message.chat.id)
@@ -41,13 +42,12 @@ async def bot_echo(message: types.Message):
         days = datetime.now(timezone.utc) - user_upd.reg_date  # Subtracting dates to know for how long user using bot
         await message.answer(_("Ваш аккаунт 🔐\n"
                                "🔹У вас {money} руб. на счету.\n"
-                               "🔹Вы можете вывести {take} рублей\n"
                                "🔹Вы пользуетесь {date} дней нашим ботом!\n"
                                "🔹Завтра у вас будет {tomorrow} руб.\n"
                                "🔹В настоящее время депозит состовляет {coef} % в день\n"
                                "🔹Вы можете посмотреть вашу историю транзакций с помощью /transactions").format(
-            money=float(user_upd.money) + float(user_upd.income), take=float(user_upd.income),
-            date=days.days, tomorrow=(float(user_upd.money) + float(user_upd.income)) * DEPOSIT_COEFFICIENT,
+            money=round(float(user_upd.money) + float(user_upd.income), 2),
+            date=days.days, tomorrow=round((float(user_upd.money) + float(user_upd.income)) * DEPOSIT_COEFFICIENT, 2),
             coef=round((DEPOSIT_COEFFICIENT - 1) * 100, 1)), reply_markup=main_keyboard())
 
     elif message.text in get_all_locales("🇷🇺 Язык"):

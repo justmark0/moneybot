@@ -22,6 +22,7 @@ class User(Model):
 class Transaction(Model):
     id = fields.IntField(pk=True)
     paying_sys_id = fields.BigIntField(index=True, null=True)
+    system = fields.CharField(30)
     user_id = fields.BigIntField()
     rub_amount = fields.FloatField()
     date = fields.DatetimeField(auto_now=True)
@@ -51,7 +52,7 @@ class Transaction(Model):
 class CurrentTrans(Model):
     id = fields.IntField(pk=True)
     amount = fields.FloatField(unique=True)
-    user_id = fields.BigIntField(unique=True)
+    user_id = fields.BigIntField()
     date = fields.DatetimeField(auto_now=True)
 
     class Meta:
@@ -63,8 +64,8 @@ class CurrentTrans(Model):
 
 class OldTrans(Model):
     id = fields.IntField(pk=True)
-    amount = fields.FloatField(unique=True)
-    user_id = fields.BigIntField(unique=True)
+    amount = fields.FloatField()
+    user_id = fields.BigIntField()
     date = fields.DatetimeField(auto_now=True)
 
     class Meta:

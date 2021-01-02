@@ -18,7 +18,7 @@ async def notify_admins_about_error(message, error_text):
     await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"),
                          reply_markup=main_keyboard())
     for id_a in admins:
-        await bot.send_message(id_a, _("Произошла ошибка в боте @{}. Описание: {}").
+        await bot.send_message(id_a, _("#error\nПроизошла ошибка в боте @{}. Описание: {}").
                                format(BOT_ALIAS, error_text))
 
 
@@ -66,8 +66,8 @@ async def select_amount(message: types.message, state: FSMContext):
 async def select_amount(message: types.message, state: FSMContext):
     if re.fullmatch(r"[+-]?([0-9]*[.])?[0-9]+", message.text):
         user = await User.get_or_none(user_id=message.chat.id)
-        if float(message.text) > user.money:
-            await message.answer(_("Вы можете вывести только {money} рублей").format(money=user.money))
+        if float(message.text) > user.money + user.income:
+            await message.answer(_("Вы можете вывести только {money} рублей").format(money=(user.money + user.income)))
             return
         if float(message.text) < MIN_MONEY_OUT:
             await message.answer(_("Минимальная сумма которую можно вывести из бота {} рублей").format(MIN_MONEY_OUT))
@@ -102,11 +102,15 @@ async def finish_check(message: types.Message, state: FSMContext):
     if message.text in get_all_locales("да"):
         async with state.proxy() as data:
             if data['system'] == "fkwallet":
+                if data['wallet_code'] == FKWALLET_WALLET_CODE:
+                    await message.answer(_("Напишите правильные данные и попробуйте заново"),
+                                         reply_markup=main_keyboard())
+                    return
                 sign_str = FKWALLET_WALLET_CODE + str(data['amount']) + str(data['wallet_code']) + FKWALLET_API_KEY
                 sign = hashlib.md5(sign_str.encode()).hexdigest()
-                data = {"wallet_id": FKWALLET_WALLET_CODE, "purse": str(data['wallet_code']),
+                data_req = {"wallet_id": FKWALLET_WALLET_CODE, "purse": str(data['wallet_code']),
                         "amount": str(data['amount']), "sign": sign, "action": "transfer"}
-                res_str = requests.post("https://www.fkwallet.ru/api_v1.php", data=data)
+                res_str = requests.post("https://www.fkwallet.ru/api_v1.php", data=data_req)
                 res = json.loads(res_str.text)
                 if "desc" not in res.keys():
                     await notify_admins_about_error(message, f"Responce starts with: "
@@ -126,15 +130,16 @@ async def finish_check(message: types.Message, state: FSMContext):
                     if str(repr(error)) == "PayeerAPIException(['transferHimselfForbidden'])":
                         await message.answer(_("Напишите правильные данные и попробуйте заново"),
                                              reply_markup=main_keyboard())
+                        return
                     else:
                         await notify_admins_about_error(message, str(repr(error)))
                         await message.answer(_("Произошла ошибка. Попробуйте снова немного позже"))
                         return
             await Transaction(paying_sys_id=200, user_id=message.chat.id, rub_amount=data['amount'],
-                              bot_pay=True, wallet_number=data["wallet_code"]).save()
+                              bot_pay=True, system=data['system'], wallet_number=data['wallet_code']).save()
             # code 200 means it's from bot
             user = await User.get_or_none(user_id=message.chat.id)
-            if user.income <= float(data['amount']):
+            if user.income >= float(data['amount']):
                 income = user.income - float(data['amount'])
                 money = user.money
             else:
@@ -144,9 +149,9 @@ async def finish_check(message: types.Message, state: FSMContext):
             await User.filter(user_id=message.chat.id).update(income=income, money=money)
             config = await User.get(user_id=1000)
             await User.filter(user_id=1000).update(income=(config.income + float(data['amount'])))
-            await message.answer(_("Оплата завершена. спасибо что используете нашего бота!"),
+            await message.answer(_("Оплата завершена!"),
                                  reply_markup=main_keyboard())
-            await GetMoney.next()
+            await state.finish()
     else:
         await message.answer(_("Напишите \"да\" чтобы подтвердить или /cancel чтобы отменить или переписать данные"))
 
@@ -155,7 +160,7 @@ async def finish_check(message: types.Message, state: FSMContext):
 async def select_wallet(message: types.Message, state: FSMContext):
     if re.fullmatch(r"[0-9]+(\.[0-9]+)?", message.text):
         exist = await CurrentTrans.get_or_none(amount=float(message.text))
-        if exist is None:
+        if exist is not None:
             await message.answer(_("Пожалуйста поменяйте сумму(можно на рубль). Или попробуйте снова через {t} минут").
                                  format(t=TTL_TRANSACTION))
             return
@@ -178,7 +183,7 @@ async def select_wallet(message: types.Message, state: FSMContext):
                   "wallet}`\nПополняйте ТОЛЬКО *рублевым* счетом\. Пополните счет в течении {ttl} "
                   "минут\. Если вам не хватило этого времени можете снова написать боту сколько "
                   "хотите пополнить и пополнить в течении {ttl} минут\. При возникнивении проблем "
-                  "пишите @VPankoff\!В течении минуты после пополнения ваш счет обновится\.\n"
+                  "пишите @VPankoff\.В течении минуты после пополнения ваш счет обновится\.\n"
                   "https://www\.fkwallet\.ru/ "
                   ).format(amount=amount, wallet=FKWALLET_WALLET_CODE, ttl=TTL_TRANSACTION),
                 parse_mode=ParseMode.MARKDOWN_V2, reply_markup=main_keyboard())

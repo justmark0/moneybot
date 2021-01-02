@@ -21,7 +21,7 @@ TTL_TRANSACTION = 10  # in minutes
 
 # Payment settings
 DEPOSIT_COEFFICIENT = 1.02
-MIN_MONEY_OUT = 400
+MIN_MONEY_OUT = 4
 PEOPLE = os.getenv("PEOPLE")
 SENT_MONEY = os.getenv("SENT_MONEY")
 WORKING_FOR = os.getenv("WORKING_FOR")

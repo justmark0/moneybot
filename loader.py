@@ -4,7 +4,7 @@ from middlewares import setup
 from data.config import *
 # from data.models import Translations
 from payeer_api import PayeerAPI
-from utils.misc.logging import logging
+# from utils.misc.logging import logging
 
 
 # async def T(code, lang='ru'):  # Function for translations from database

@@ -44,7 +44,7 @@ async def bot_start(message: types.Message, state):
         for transaction in transactions_query:
             days = datetime.now(timezone.utc) - transaction.date
             if transaction.bot_pay:
-                message_text += _("🔸Бот отправил {} рублей на {} Payeer кошелек {} дней назад\n"). \
+                message_text += _("🔸Бот отправил {} рублей на {} {} кошелек {} дней назад\n"). \
                     format(transaction.rub_amount, transaction.wallet_number, days.days)
             else:
                 message_text += _("🔹Вы перевели боту {} рублей {} дней назад\n"). \

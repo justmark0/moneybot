@@ -1,9 +1,11 @@
 from datetime import datetime, timezone
-from data.config import *
+from aiogram import Bot, types
 from tortoise import Tortoise
 from .logging import logging
-from loader import payeer, bot
+from data.config import *
 from data.models import *
+from loader import payeer
+from loader import _
 import requests
 import asyncio
 import hashlib
@@ -15,7 +17,7 @@ class AsyncUpdate:
     def __init__(self):
         pass
 
-    async def update(self):
+    async def update(self, bot):
         counter = 0
         work_time = 0
         await Tortoise.init(db_url=DB_URL, modules={"models": ["data.models"]})  # Connecting new process to Database
@@ -29,6 +31,10 @@ class AsyncUpdate:
             res_str = requests.post("https://www.fkwallet.ru/api_v1.php", data=data)
             res = json.loads(res_str.text)
             last_amount_fk = await FkHistory.all().order_by('-id').first()
+            if last_amount_fk is None:
+                am = res['data']['RUR'] or 0
+                await FkHistory(amount=am).save()
+                last_amount_fk = await FkHistory.all().order_by('-id').first()
             rub_now = None
             if str(type(res)) == "<class 'dict'>":
                 if "data" in res.keys():
@@ -40,29 +46,32 @@ class AsyncUpdate:
                 # TODO add several transactions may be made between receiving updates
                 if last_amount_fk.amount != float(res['data']['RUR']):
                     await FkHistory(amount=res['data']['RUR']).save()
-                if last_amount_fk.amount > float(res['data']['RUR']):
-                    increase = last_amount_fk.amount - float(res['data']['RUR'])
-                    current_transaction = await CurrentTrans.get_or_none(amount=increase)
+                if last_amount_fk.amount < float(res['data']['RUR']):
+                    increase = float(res['data']['RUR']) - last_amount_fk.amount
+                    current_transaction = await CurrentTrans.get_or_none(amount=float(increase))
 
                     if current_transaction is None:  # Didn't found user
-                        all_current_message = "FkWallet received money but didn't find person who sent money. All " \
-                                              "current transactions:"
+                        all_current_message = "#warning\nFkWallet received money but didn't find person who sent " \
+                                              "money. All current transactions: "
                         all_current = await CurrentTrans.all()
                         for current in all_current:
                             all_current_message += "\n" + str(current)
                         for admin in admins:
                             await bot.send_message(admin, all_current_message)
                     else:  # Found user
-                        await Transaction(user_id=current_transaction.user_id, rub_amount=increase, bot_pay=False).\
-                            save()
+                        await Transaction(user_id=current_transaction.user_id, rub_amount=increase, bot_pay=False,
+                                          system="fkwallet").save()
                         user = await User.get(user_id=current_transaction.user_id)
-                        await User.filter(user_id=current_transaction.user_id).update(amount=(user.money + increase))
+                        await User.filter(user_id=current_transaction.user_id).update(money=(user.money + increase))
+                        await bot.send_message(current_transaction.user_id, _("Ваш счет пополнен на {} рублей").
+                                               format(increase))
                 #  If Fkwallet lost money
-                elif last_amount_fk.amount < float(res['data']['RUR']):
+                elif last_amount_fk.amount > float(res['data']['RUR']):
                     if SEND_MESSAGE_IF_LOST:
-                        lost = float(res['data']['RUR']) - last_amount_fk.amount
+                        lost = last_amount_fk.amount - float(res['data']['RUR'])
                         for admin in admins:
-                            await bot.send_message(admin, f"From Fkwallet was transaction from rubles!!! Amount {lost}")
+                            await bot.send_message(admin, f"#info\nFrom Fkwallet was transaction from wallet in "
+                                                          f"rubles!!! Amount: -{lost}")
 
             # Payeer updater
             history = payeer.history()
@@ -84,8 +93,8 @@ class AsyncUpdate:
                                 update(money=float(user.money) + float(history[transaction_id]['creditedAmount']))
 
                         await Transaction(paying_sys_id=transaction_id, user_id=history[transaction_id]['comment'],
-                                          rub_amount=float(history[transaction_id]['creditedAmount']), bot_pay=bot_pay). \
-                            save()
+                                          rub_amount=float(history[transaction_id]['creditedAmount']),
+                                          bot_pay=bot_pay, system='payeer').save()
 
             # Deleting old transactions
             all_trans = await CurrentTrans.all()
@@ -124,4 +133,5 @@ class AsyncUpdate:
             time.sleep(request_each - (time.time() - start_time))
 
     def run(self):
-        asyncio.run(self.update())
+        bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
+        asyncio.run(self.update(bot))
