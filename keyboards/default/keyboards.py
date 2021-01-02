@@ -27,6 +27,13 @@ def put_get_money():
     return keyboard
 
 
+def get_money():
+    keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    keyboard_text = ("Fkwallet", "Payeer", _("⬅️ Отмена"))
+    keyboard.add(*(types.KeyboardButton(text) for text in keyboard_text))
+    return keyboard
+
+
 def confirm_keyboard():
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     keyboard_text = (_('да'), _("⬅️ Отмена"))

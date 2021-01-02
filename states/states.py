@@ -10,6 +10,7 @@ class Money(StatesGroup):
 
 
 class GetMoney(StatesGroup):
+    System = State()
     Amount = State()
     WalletNumber = State()
     Finish = State()

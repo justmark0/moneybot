@@ -35,7 +35,7 @@ class AsyncUpdate:
                     rub_now = float(res['data']['RUR'])
             if rub_now is None:
                 logging.error(f"{datetime.now(tz=None)} Error recieving data from Fkwallet. Response starts with "
-                              f"{res_str.text[100::]}")
+                              f"{res_str.text[:max(len(res_str.text) - 1, 100):]}")
             else:
                 # TODO add several transactions may be made between receiving updates
                 if last_amount_fk.amount != float(res['data']['RUR']):
@@ -59,7 +59,6 @@ class AsyncUpdate:
                         await User.filter(user_id=current_transaction.user_id).update(amount=(user.money + increase))
                 #  If Fkwallet lost money
                 elif last_amount_fk.amount < float(res['data']['RUR']):
-                    # TODO make getting money by user (Change amount of user and create transaction)
                     if SEND_MESSAGE_IF_LOST:
                         lost = float(res['data']['RUR']) - last_amount_fk.amount
                         for admin in admins:
@@ -103,6 +102,21 @@ class AsyncUpdate:
 
             work_time += time.time() - start_time
             if counter % 100 == 0:
+                #  Deposit updater
+                config_user = await User.get(user_id=1000)
+                times = ((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
+                await User.filter(user_id=1000).update\
+                    (money=int((datetime.now(timezone.utc) - config_user.reg_date).days))
+                if times > 0:
+                    users = await User.all()
+                    for i in range(times):
+                        for user in users:
+                            if user.id == 1000:
+                                continue
+                            await User.filter(user_id=user.user_id).\
+                                update(income=user.money * DEPOSIT_COEFFICIENT + user.income)
+                # End of deposit updater
+
                 logging.info(f"Average run for {work_time / 100}; Average sleep sleep for "
                              f"{request_each - (work_time / 100)}")
                 work_time = 0
