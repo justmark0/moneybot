@@ -8,7 +8,6 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 admins = [
     os.getenv("ADMIN_ID"),
-    os.getenv("ADMIN_ID2"),
 ]
 BOT_ALIAS = os.getenv('BOT_ALIAS')
 CHANNEL_NAME = os.getenv('CHANNEL_NAME')
@@ -21,7 +20,6 @@ request_each = 20  # in seconds
 TTL_TRANSACTION = 10  # in minutes
 
 # Payment settings
-DEPOSIT_COEFFICIENT = 1.02
 MIN_MONEY_OUT = 400
 PEOPLE = os.getenv("PEOPLE")
 SENT_MONEY = os.getenv("SENT_MONEY")

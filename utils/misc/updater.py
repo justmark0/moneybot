@@ -153,6 +153,9 @@ class AsyncUpdate:
             if counter % 100 == 0:
                 counter = 0
                 #  Deposit updater
+                get_user_deposit = await User.get(user_id=1001)
+                DEPOSIT_COEFFICIENT = get_user_deposit.money
+                user_upd = await User.get_or_none(user_id=message.chat.id)
                 config_user = await User.get(user_id=1000)
                 times = ((datetime.now(timezone.utc) - config_user.reg_date).days - int(config_user.money))
                 await User.filter(user_id=1000).update\

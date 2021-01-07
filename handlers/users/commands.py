@@ -1,8 +1,9 @@
-from data.config import CANCEL_MESSAGE_LIST
+from data.config import CANCEL_MESSAGE_LIST, admins
 from aiogram.dispatcher import FSMContext
 from keyboards.default.keyboards import *
 from keyboards.inline.keyboards import *
 from datetime import datetime, timezone
+from states.states import SetPercent
 from utils.misc import rate_limit
 from data.models import *
 from loader import dp, _
@@ -33,6 +34,14 @@ async def bot_start(message: types.Message, state: FSMContext):
     if user is None:
         await User(user_id=message.chat.id, alias=message.from_user.username, money=0, language="ru").save()
     await message.answer(_("Привет! Я помогу тебе заработать деньги!"), reply_markup=main_keyboard())
+
+
+@dp.message_handler(state="*", commands=['set_percent'])
+async def send_welcome(message: types.Message, state: FSMContext):
+    if str(message.chat.id) in admins:
+        await message.answer("Напишите сколько вы хотите чтобы была процентная ставка:")
+        await state.finish()
+        await SetPercent.next()
 
 
 @dp.message_handler(state="*", commands=['transactions'])

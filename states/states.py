@@ -19,3 +19,7 @@ class GetMoney(StatesGroup):
 class PutMoney(StatesGroup):
     Amount = State()
     Finish = State()
+
+
+class SetPercent(StatesGroup):
+    Finish = State()

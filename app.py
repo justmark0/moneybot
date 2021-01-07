@@ -12,6 +12,10 @@ async def on_startup(dp):
     update_process.start()
     await Tortoise.init(db_url=DB_URL, modules={"models": ["data.models"]})
     await User.get_or_create(user_id=1000, language="en")
+    user = await User.get_or_none(user_id=1001)
+    if user is None:
+        await User(user_id=1001, language="en", money=1.07).save()
+
 
 if __name__ == '__main__':
     from aiogram import executor

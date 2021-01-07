@@ -37,7 +37,8 @@ async def bot_echo(message: types.Message):
         if user is None:
             await message.answer(_("Вы не зарегестрированны, используйте /start"))
             return
-
+        get_user_deposit = await User.get(user_id=1001)
+        DEPOSIT_COEFFICIENT = get_user_deposit.money
         user_upd = await User.get_or_none(user_id=message.chat.id)
         days = datetime.now(timezone.utc) - user_upd.reg_date  # Subtracting dates to know for how long user using bot
         await message.answer(_("Ваш аккаунт 🔐\n"
@@ -48,7 +49,7 @@ async def bot_echo(message: types.Message):
                                "🔹Вы можете посмотреть вашу историю транзакций с помощью /transactions").format(
             money=round(float(user_upd.money) + float(user_upd.income), 2),
             date=days.days, tomorrow=round((float(user_upd.money) + float(user_upd.income)) * DEPOSIT_COEFFICIENT, 2),
-            coef=round((DEPOSIT_COEFFICIENT - 1) * 100, 1)), reply_markup=main_keyboard())
+            coef=round((float(DEPOSIT_COEFFICIENT) - 1), 2)), reply_markup=main_keyboard())
 
     elif message.text in get_all_locales("🇷🇺 Язык"):
         await message.answer(_("Какой язык хотите использовать?"), reply_markup=language_keyboard())

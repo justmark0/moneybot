@@ -191,3 +191,13 @@ async def select_wallet(message: types.Message, state: FSMContext):
             await PutMoney.next()
     else:
         await message.answer(_("Напишите \"да\" чтобы подтвердить или /cancel чтобы отменить или переписать данные"))
+
+
+@dp.message_handler(state=SetPercent.Finish)
+async def finish_check(message: types.Message, state: FSMContext):
+    if re.fullmatch(r"[0-9]+(\.[0-9]+)?", message.text):
+        await User.filter(user_id=1001).update(money=1 + float(message.text))
+        await message.answer("Готово", reply_markup=main_keyboard())
+        await state.finish()
+    else:
+        await message.answer(_("Вводите только числа. Если хотите использовать нецелые числа пишите через точку"))
