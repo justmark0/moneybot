@@ -1,5 +1,5 @@
 aiogram==2.11.2
-aiohttp==3.7.3
+aiohttp==3.7.4
 aiomysql==0.0.21
 aiosqlite==0.16.0
 async-timeout==3.0.1
